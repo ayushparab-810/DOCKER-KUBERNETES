@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hands-on Linux administration and Docker fundamentals learning hub with commands, examples and expected outputs.">
+<title>Linux & Docker Learning Hub</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2d;--panel2:#172238;--text:#e8eefc;--muted:#a8b4cc;--accent:#55c2ff;--green:#7ee0b3;--border:#293650;--code:#080d18}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,Segoe UI,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:10;background:#0b1020ed;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav{max-width:1200px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:800;letter-spacing:.2px}.brand span{color:var(--accent)}
+nav{display:flex;gap:16px;flex-wrap:wrap;font-size:.9rem}
+.hero{max-width:1200px;margin:auto;padding:76px 22px 54px}
+.eyebrow{color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:.78rem}
+h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.08;margin:12px 0 18px;max-width:850px}
+.hero p{color:var(--muted);font-size:1.12rem;max-width:760px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.btn{display:inline-block;padding:11px 17px;border-radius:9px;background:var(--accent);color:#06101d;font-weight:800}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
+.wrap{max-width:1200px;margin:auto;padding:0 22px 70px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:10px 0 40px}
+.stat,.card,.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.stat strong{display:block;font-size:1.6rem;color:var(--green)}
+.layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:25px;align-items:start}
+.sidebar{position:sticky;top:82px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.sidebar h3{margin:0 0 10px}.sidebar a{display:block;color:var(--muted);padding:6px 0;font-size:.92rem}
+main section{margin:0 0 48px}.section-head{margin-bottom:18px}
+.kicker{color:var(--green);font-weight:700;font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase}
+h2{font-size:2rem;line-height:1.2;margin:5px 0 8px}h3{margin:25px 0 8px;font-size:1.25rem}
+p{margin:8px 0 14px}.muted{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.topic{margin:14px 0}.topic h3{margin:0 0 8px}.topic p{color:var(--muted)}
+pre{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:15px;overflow-x:auto;margin:10px 0 6px;color:#d9e7ff;font: .9rem/1.6 Consolas,Monaco,monospace;white-space:pre}
+.code-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.8rem;margin-top:13px}
+.copy{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:5px 10px;border-radius:7px;cursor:pointer}
+.output{border-left:3px solid var(--green);padding:8px 13px;background:#0e1c20;border-radius:0 8px 8px 0;color:#b9f4d9;font: .86rem/1.55 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.note{border:1px solid #31516c;background:#102237;padding:13px 15px;border-radius:10px;color:#c8eaff;margin:14px 0}
+.warn{border-color:#70552d;background:#241d11;color:#ffe0a8}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:.92rem}
+th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left;vertical-align:top}
+th{color:var(--green);background:var(--panel2)}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;color:var(--muted);border-bottom:1px solid var(--border)}
+input[type=checkbox]{margin-top:6px;accent-color:var(--green);width:17px;height:17px}
+.progress{height:8px;background:var(--panel2);border-radius:20px;overflow:hidden;margin:10px 0}
+.progress span{display:block;height:100%;width:0;background:var(--green);transition:width .2s}
+footer{border-top:1px solid var(--border);padding:25px;text-align:center;color:var(--muted)}
+.small{font-size:.85rem;color:var(--muted)}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{position:static}.sidebar div{display:grid;grid-template-columns:repeat(2,1fr);gap:0 12px}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){nav{display:none}.grid2,.stats{grid-template-columns:1fr}.hero{padding-top:48px}h2{font-size:1.65rem}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <div class="brand">LINUX <span>&</span> DOCKER LAB</div>
+  <nav><a href="#linux">Linux</a><a href="#docker">Docker</a><a href="#practice">Practice</a><a href="#checklist">Checklist</a></nav>
+</div></header>
+
+<div class="hero">
+  <div class="eyebrow">Hands-on technical learning</div>
+  <h1>Linux & Docker<br><span style="color:var(--accent)">Learning Hub.</span></h1>
+  <p>A practical reference for Linux administration and Docker fundamentals. Learn the concept, run the command, and compare your terminal output with the examples.</p>
+  <div class="hero-actions"><a class="btn" href="#linux">Start learning ↓</a><a class="btn secondary" href="#checklist">Track my progress</a></div>
+</div>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><strong>7</strong>Linux topic groups</div>
+    <div class="stat"><strong>7</strong>Docker topic groups</div>
+    <div class="stat"><strong>Hands-on</strong>Commands + sample output</div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Course navigation</h3>
+      <div>
+        <a href="#linux">01 · Linux basics</a>
+        <a href="#commands">Linux commands</a>
+        <a href="#processes">Processes</a>
+        <a href="#systemctl">systemctl</a>
+        <a href="#networking">Networking</a>
+        <a href="#ssh">SSH</a>
+        <a href="#firewalld">firewalld</a>
+        <a href="#selinux">SELinux</a>
+        <a href="#docker">02 · Docker</a>
+        <a href="#concepts">Images & containers</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#lifecycle">Container lifecycle</a>
+        <a href="#dockerfile">Dockerfile</a>
+        <a href="#volumes">Volumes</a>
+        <a href="#dnetwork">Networking</a>
+        <a href="#registry">Docker Hub</a>
+        <a href="#practice">Mini project</a>
+        <a href="#checklist">Learning checklist</a>
+      </div>
+    </aside>
+
+    <main>
+      <section id="linux">
+        <div class="section-head"><div class="kicker">Part 01 · Foundation</div><h2>Linux Administration Basics</h2><p class="muted">Examples below use a RHEL-compatible system. Some commands may require root privileges or package installation.</p></div>
+        <div class="note">Tip: run commands in a test VM first. Sample outputs are illustrative; hostnames, IP addresses, process IDs and versions will differ on your machine.</div>
+      </section>
+
+      <section id="commands">
+        <div class="kicker">01.1 · Terminal essentials</div><h2>Linux Commands</h2>
+        <p>Use commands to navigate the filesystem, inspect files, search text and manage directories.</p>
+        <div class="topic">
+          <h3>Navigation and file management</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>pwd
+ls -lah
+cd /var/log
+mkdir practice
+touch notes.txt
+cp notes.txt notes-backup.txt
+mv notes-backup.txt backup.txt
+rm backup.txt</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>pwd / ls -lah</span></div>
+          <div class="output">$ pwd
+/home/ayush
+
+$ ls -lah
+drwx------  8 ayush ayush 4.0K Oct 30 09:00 .
+-rw-r--r--  1 ayush ayush    0 Oct 30 09:01 notes.txt</div>
+        </div>
+        <div class="topic">
+          <h3>Search and inspect files</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>cat /etc/os-release
+head -n 5 /var/log/messages
+tail -f /var/log/messages
+grep -i "error" /var/log/messages
+find /etc -name "*.conf"</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>cat /etc/os-release</span></div>
+          <div class="output">NAME="Red Hat Enterprise Linux"
+VERSION="10.0"
+ID="rhel"
+VERSION_ID="10.0"</div>
+        </div>
+        <div class="topic">
+          <h3>Disk and memory inspection</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>df -h
+du -sh /var/log
+free -h
+lsblk</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>df -h</span></div>
+          <div class="output">Filesystem             Size  Used Avail Use% Mounted on
+/dev/mapper/rhel-root   16G  8.2G  7.8G  52% /
+/dev/sda1             1.0G  250M  774M  25% /boot</div>
+        </div>
+      </section>
+
+      <section id="processes">
+        <div class="kicker">01.2 · Running programs</div><h2>Processes</h2>
+        <p>A process is a running instance of a program. Linux assigns each process a PID (process ID).</p>
+        <div class="topic">
+          <h3>List, monitor and signal processes</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>ps aux
+ps -ef | grep nginx
+top
+pgrep -a sshd
+kill -TERM 1234
+kill -9 1234
+nice -n 10 sleep 300
+jobs
+bg
+fg</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>ps -ef | grep sshd</span></div>
+          <div class="output">root       1020       1  0 08:20 ?  00:00:00 /usr/sbin/sshd -D
+ayush      2450    2200  0 09:10 pts/0 00:00:00 grep --color=auto sshd</div>
+          <div class="note warn"><strong>Important:</strong> use <code>kill -TERM PID</code> first to request a graceful shutdown. <code>kill -9</code> forcefully terminates a process and should be a last resort.</div>
+        </div>
+      </section>
+
+      <section id="systemctl">
+        <div class="kicker">01.3 · Service management</div><h2>systemctl and systemd</h2>
+        <p>systemd is the service manager on modern RHEL systems. <code>systemctl</code> controls services and system targets.</p>
+        <div class="topic">
+          <h3>Manage the Apache HTTP server</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>sudo dnf install httpd -y
+sudo systemctl start httpd
+sudo systemctl status httpd
+sudo systemctl enable httpd
+sudo systemctl restart httpd
+sudo systemctl stop httpd</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>systemctl status httpd</span></div>
+          <div class="output">● httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service)
+     Active: active (running)
+   Main PID: 1842 (httpd)
+       Docs: man:httpd.service(8)</div>
+          <p class="small"><code>start</code> starts now; <code>enable</code> configures the service to start automatically at boot. They are different operations.</p>
+        </div>
+      </section>
+
+      <section id="networking">
+        <div class="kicker">01.4 · Connectivity</div><h2>Linux Networking</h2>
+        <p>Inspect IP addresses, routes, listening sockets and DNS. These are essential troubleshooting tools.</p>
+        <div class="topic">
+          <h3>Network inspection commands</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>ip addr
+ip route
+nmcli device status
+ss -tulnp
+ping -c 4 8.8.8.8
+curl -I https://example.com
+dig example.com
+traceroute example.com</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>ip route</span></div>
+          <div class="output">default via 192.168.125.2 dev ens256 proto static
+192.168.125.0/24 dev ens256 proto kernel scope link src 192.168.125.131</div>
+        </div>
+        <div class="topic">
+          <h3>Check whether a port is listening</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>sudo ss -tulnp
+sudo ss -lntp | grep :80
+curl http://localhost</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>ss -lntp</span></div>
+          <div class="output">State  Recv-Q Send-Q Local Address:Port  Peer Address:Port
+LISTEN 0      511    0.0.0.0:80         0.0.0.0:*</div>
+        </div>
+      </section>
+
+      <section id="ssh">
+        <div class="kicker">01.5 · Remote access</div><h2>SSH</h2>
+        <p>SSH provides encrypted remote shell access to another Linux machine.</p>
+        <div class="topic">
+          <h3>Connect and configure key-based authentication</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code># Connect to a remote host
+ssh ayush@192.168.125.131
+
+# Generate an SSH key pair
+ssh-keygen -t ed25519
+
+# Copy your public key to the remote host
+ssh-copy-id ayush@192.168.125.131
+
+# Check SSH service
+sudo systemctl status sshd
+
+# Check SSH server configuration syntax
+sudo sshd -t</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>Successful connection</span></div>
+          <div class="output">ayush@192.168.125.131's password:
+Last login: Thu Oct 30 09:10:00 2026
+[ayush@rhel ~]$</div>
+          <div class="note">Troubleshooting order: verify the destination IP and route, confirm <code>sshd</code> is running, check port 22 listening, inspect firewalld, then review SSH authentication and SELinux-related logs.</div>
+        </div>
+      </section>
+
+      <section id="firewalld">
+        <div class="kicker">01.6 · Host firewall</div><h2>firewalld</h2>
+        <p>firewalld manages host firewall rules using zones, services and ports. A running application does not automatically mean the firewall allows remote access.</p>
+        <div class="topic">
+          <h3>Allow HTTP traffic on port 80</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>sudo systemctl status firewalld
+sudo firewall-cmd --get-active-zones
+sudo firewall-cmd --list-all
+
+# Open HTTP permanently in the active public zone
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-services
+
+# Alternatively, open a TCP port
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>firewall-cmd --list-services</span></div>
+          <div class="output">cockpit dhcpv6-client http ssh</div>
+          <p class="small">A permanent rule is stored for future reloads. A runtime-only rule does not survive a reload or reboot. Use the correct active zone for the network interface.</p>
+        </div>
+      </section>
+
+      <section id="selinux">
+        <div class="kicker">01.7 · Mandatory access control</div><h2>SELinux</h2>
+        <p>SELinux applies security policies that can restrict what processes access, even when normal Linux file permissions appear to allow it.</p>
+        <div class="topic">
+          <h3>Check status and investigate denials</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>getenforce
+sestatus
+
+# View SELinux file contexts
+ls -Z /var/www/html
+
+# Restore default contexts
+sudo restorecon -Rv /var/www/html
+
+# Search recent access denials
+sudo ausearch -m AVC -ts recent</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>getenforce</span></div>
+          <div class="output">Enforcing</div>
+          <div class="note warn">Do not permanently disable SELinux just to fix an application. Identify the denial and correct the file context, boolean or policy configuration where appropriate.</div>
+        </div>
+      </section>
+
+      <section id="docker">
+        <div class="section-head"><div class="kicker">Part 02 · Containers</div><h2>Docker Fundamentals</h2><p class="muted">Docker packages an application and its dependencies into an image, then runs that image as a container.</p></div>
+      </section>
+
+      <section id="concepts">
+        <div class="kicker">02.1 · Core concepts</div><h2>Images vs Containers</h2>
+        <div class="grid2">
+          <div class="topic"><h3>Docker Image</h3><p>An immutable, layered template used to create containers. It contains application files, dependencies and metadata.</p><pre><code>docker pull nginx:latest
+docker images</code></pre></div>
+          <div class="topic"><h3>Docker Container</h3><p>A running or stopped instance created from an image. A writable layer is added above the image's read-only layers.</p><pre><code>docker run -d nginx
+docker ps</code></pre></div>
+        </div>
+        <div class="note">A useful analogy: an image is like a class or template; a container is an instance created from it. Containers are isolated processes, not miniature virtual machines.</div>
+      </section>
+
+      <section id="architecture">
+        <div class="kicker">02.2 · Under the hood</div><h2>Docker Architecture</h2>
+        <div class="topic">
+          <h3>Main components</h3>
+          <table><thead><tr><th>Component</th><th>Role</th></tr></thead><tbody>
+            <tr><td>Docker Client</td><td>The CLI used to send commands such as <code>docker run</code>.</td></tr>
+            <tr><td>Docker Daemon (dockerd)</td><td>Provides Docker API services and manages Docker objects.</td></tr>
+            <tr><td>Docker REST API</td><td>Communication interface between clients and the daemon.</td></tr>
+            <tr><td>containerd</td><td>Manages container lifecycle operations beneath Docker Engine.</td></tr>
+            <tr><td>OCI runtime (e.g. runc)</td><td>Creates and runs containers using OCI runtime specifications.</td></tr>
+            <tr><td>Registry</td><td>Stores and distributes images, for example Docker Hub.</td></tr>
+          </tbody></table>
+          <div class="code-head">TRY THIS <button class="copy">Copy</button></div>
+          <pre><code>docker version
+docker info</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>docker version (shortened)</span></div>
+          <div class="output">Client: Docker Engine
+ Version:           29.x
+ API version:       1.5x
+
+Server: Docker Engine
+ Engine:
+  Version:          29.x
+ containerd:
+  Version:          2.x</div>
+          <p class="small">Exact versions and component details depend on the Docker Engine release and installation.</p>
+        </div>
+      </section>
+
+      <section id="lifecycle">
+        <div class="kicker">02.3 · Daily commands</div><h2>Build, Run and Manage Containers</h2>
+        <div class="topic">
+          <h3>Run an Nginx web server</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code># Download image
+docker pull nginx:latest
+
+# Run in detached mode and publish host port 8080 to container port 80
+docker run -d --name web1 -p 8080:80 nginx:latest
+
+# List running containers
+docker ps
+
+# View logs
+docker logs web1
+
+# Open a shell inside the container
+docker exec -it web1 sh
+
+# Stop and restart
+docker stop web1
+docker start web1
+
+# Remove the container after it is stopped
+docker stop web1
+docker rm web1</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>docker ps</span></div>
+          <div class="output">CONTAINER ID  IMAGE         COMMAND              STATUS         PORTS
+a1b2c3d4e5f6  nginx:latest  "/docker-entrypoint" Up 10 seconds  0.0.0.0:8080->80/tcp</div>
+          <div class="code-head">TEST IN A BROWSER OR TERMINAL</div>
+          <pre><code>curl http://localhost:8080</code></pre>
+          <div class="output">... &lt;title&gt;Welcome to nginx!&lt;/title&gt; ...</div>
+          <div class="note">The <code>-p 8080:80</code> option publishes host TCP port 8080 to container TCP port 80. Nginx must be running and listening inside the container. Host firewall rules and network infrastructure can still affect remote access.</div>
+        </div>
+        <div class="topic">
+          <h3>Useful inspection commands</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>docker ps -a
+docker inspect web1
+docker stats
+docker top web1
+docker port web1
+docker logs --tail 50 web1</code></pre>
+        </div>
+      </section>
+
+      <section id="dockerfile">
+        <div class="kicker">02.4 · Build your own image</div><h2>Dockerfile</h2>
+        <p>A Dockerfile is a text file containing instructions used by Docker to build an image.</p>
+        <div class="topic">
+          <h3>Example: static website with Nginx</h3>
+          <p>Create a file named <code>index.html</code>:</p>
+          <div class="code-head">index.html <button class="copy">Copy</button></div>
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;My Docker Website&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello from my Docker container!&lt;/h1&gt;
+  &lt;p&gt;This page is served by Nginx.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          <p>Create a file named <code>Dockerfile</code> in the same directory:</p>
+          <div class="code-head">Dockerfile <button class="copy">Copy</button></div>
+          <pre><code>FROM nginx:alpine
+COPY index.html /usr/share/nginx/html/index.html
+EXPOSE 80</code></pre>
+          <p>Build and run:</p>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>docker build -t my-website:v1 .
+docker run -d --name my-site -p 8080:80 my-website:v1
+curl http://localhost:8080</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>curl</span></div>
+          <div class="output">&lt;h1&gt;Hello from my Docker container!&lt;/h1&gt;
+&lt;p&gt;This page is served by Nginx.&lt;/p&gt;</div>
+        </div>
+        <div class="topic">
+          <h3>Common Dockerfile instructions</h3>
+          <table><thead><tr><th>Instruction</th><th>Purpose</th></tr></thead><tbody>
+            <tr><td><code>FROM</code></td><td>Sets the base image.</td></tr>
+            <tr><td><code>WORKDIR</code></td><td>Sets the working directory for later instructions.</td></tr>
+            <tr><td><code>COPY</code></td><td>Copies files from the build context into the image.</td></tr>
+            <tr><td><code>ADD</code></td><td>Copies files and supports additional source handling, such as local tar extraction.</td></tr>
+            <tr><td><code>RUN</code></td><td>Executes commands during image build.</td></tr>
+            <tr><td><code>ENV</code></td><td>Sets environment variables.</td></tr>
+            <tr><td><code>EXPOSE</code></td><td>Documents the port the application is intended to use; it does not publish the port.</td></tr>
+            <tr><td><code>CMD</code></td><td>Provides the default command or arguments when a container starts.</td></tr>
+            <tr><td><code>ENTRYPOINT</code></td><td>Configures the executable to run when the container starts.</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <section id="volumes">
+        <div class="kicker">02.5 · Persistent data</div><h2>Docker Volumes</h2>
+        <p>Container writable-layer data is removed when the container is removed. Volumes let data live independently of a container's lifecycle.</p>
+        <div class="topic">
+          <h3>Create and use a named volume</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code>docker volume create app-data
+docker volume ls
+
+docker run -d --name volume-test \\
+  -v app-data:/usr/share/nginx/html \\
+  -p 8081:80 nginx:alpine
+
+docker volume inspect app-data
+docker rm -f volume-test
+
+# The named volume remains after container removal
+docker volume ls</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>docker volume ls</span></div>
+          <div class="output">DRIVER    VOLUME NAME
+local     app-data</div>
+        </div>
+        <div class="topic">
+          <h3>Bind mount example</h3>
+          <div class="code-head">COMMAND <button class="copy">Copy</button></div>
+          <pre><code>docker run -d --name site-dev \\
+  -p 8082:80 \\
+  -v "$PWD/site:/usr/share/nginx/html:ro" \\
+  nginx:alpine</code></pre>
+          <p class="small">A bind mount maps a specific host path into the container. The <code>:ro</code> suffix makes the mount read-only inside the container.</p>
+        </div>
+      </section>
+
+      <section id="dnetwork">
+        <div class="kicker">02.6 · Container connectivity</div><h2>Docker Networking</h2>
+        <p>Docker networks connect containers and can provide isolation and name-based discovery.</p>
+        <div class="topic">
+          <h3>Bridge network and container-to-container DNS</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code># Create a user-defined bridge network
+docker network create app-net
+
+# Start two containers on the same network
+docker run -d --name web --network app-net nginx:alpine
+docker run -d --name client --network app-net alpine sleep 3600
+
+# Resolve the other container by its name
+docker exec client ping -c 2 web
+
+# Inspect and clean up
+docker network inspect app-net
+docker rm -f web client
+docker network rm app-net</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>ping web from client</span></div>
+          <div class="output">PING web (172.20.0.2): 56 data bytes
+64 bytes from 172.20.0.2: seq=0 ttl=64 time=0.1 ms
+64 bytes from 172.20.0.2: seq=1 ttl=64 time=0.1 ms
+2 packets transmitted, 2 packets received</div>
+        </div>
+        <div class="topic">
+          <h3>Common network drivers</h3>
+          <table><thead><tr><th>Driver</th><th>Typical use</th></tr></thead><tbody>
+            <tr><td>bridge</td><td>Connect containers on one Docker host. User-defined bridges support container-name DNS.</td></tr>
+            <tr><td>host</td><td>Use the host network namespace; port publishing is generally not needed.</td></tr>
+            <tr><td>none</td><td>Disable normal external container networking.</td></tr>
+            <tr><td>overlay</td><td>Connect services across multiple Docker hosts in supported configurations.</td></tr>
+          </tbody></table>
+          <div class="note">Remember: <code>EXPOSE 80</code> in a Dockerfile is documentation. <code>-p 8080:80</code> publishes a port. They are not the same operation.</div>
+        </div>
+      </section>
+
+      <section id="registry">
+        <div class="kicker">02.7 · Image distribution</div><h2>Docker Hub and Registries</h2>
+        <p>A registry stores images. Docker Hub is a popular hosted registry where you can publish and download images.</p>
+        <div class="topic">
+          <h3>Tag, log in and push an image</h3>
+          <div class="code-head">COMMANDS <button class="copy">Copy</button></div>
+          <pre><code># Sign in (use a personal access token when appropriate)
+docker login
+
+# Tag a local image for your Docker Hub namespace
+docker tag my-website:v1 YOUR_DOCKERHUB_USERNAME/my-website:v1
+
+# Push the image
+docker push YOUR_DOCKERHUB_USERNAME/my-website:v1
+
+# Pull it on another machine
+docker pull YOUR_DOCKERHUB_USERNAME/my-website:v1
+
+# Run the pulled image
+docker run -d -p 8080:80 YOUR_DOCKERHUB_USERNAME/my-website:v1</code></pre>
+          <div class="code-head">SAMPLE OUTPUT <span>docker push (illustrative)</span></div>
+          <div class="output">The push refers to repository [docker.io/yourname/my-website]
+v1: pushed
+latest: digest: sha256:... size: 1234</div>
+          <div class="note warn">Replace <code>YOUR_DOCKERHUB_USERNAME</code> with your actual Docker Hub username. Never put passwords or access tokens in a Dockerfile, Git repository or public webpage.</div>
+        </div>
+      </section>
+
+      <section id="practice">
+        <div class="kicker">03 · Apply what you learned</div><h2>Mini Project: Publish Your Own Website</h2>
+        <p>Build a tiny website image, run it in a container, publish the port and push the image to Docker Hub.</p>
+        <div class="topic">
+          <h3>Project workflow</h3>
+          <ol>
+            <li>Create a project folder: <code>mkdir linux-docker-site && cd linux-docker-site</code>.</li>
+            <li>Create <code>index.html</code> with your own title and content.</li>
+            <li>Create the Dockerfile shown in the Dockerfile section.</li>
+            <li>Build the image with <code>docker build -t my-website:v1 .</code>.</li>
+            <li>Run it with <code>docker run -d --name my-site -p 8080:80 my-website:v1</code>.</li>
+            <li>Test it with <code>curl http://localhost:8080</code> or open that address in your browser.</li>
+            <li>Check logs and status using <code>docker ps</code> and <code>docker logs my-site</code>.</li>
+            <li>Tag and push the image to your Docker Hub repository.</li>
+          </ol>
+        </div>
+        <div class="topic">
+          <h3>Troubleshooting questions</h3>
+          <ul>
+            <li>Container is running but the website does not load. Is the application listening on the expected container port?</li>
+            <li>Is the host port mapped correctly with <code>-p HOST_PORT:CONTAINER_PORT</code>?</li>
+            <li>Is another process already using the host port?</li>
+            <li>Are host firewall rules blocking remote access?</li>
+            <li>Do container logs show an application startup error?</li>
+            <li>Does the Docker daemon have enough disk space to pull or build the image?</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="checklist">
+        <div class="kicker">04 · Your progress</div><h2>Learning Checklist</h2>
+        <p class="muted">Tick each item after you have practised it. Your progress is saved in this page while it remains open; it is not synced to GitHub or another device.</p>
+        <div class="progress"><span id="progressBar"></span></div><p id="progressText" class="small">0 of 20 completed</p>
+        <div class="topic checklist" id="checks">
+          <label><input type="checkbox"> I can navigate Linux directories and manage files.</label>
+          <label><input type="checkbox"> I can search files and inspect logs using grep, find, head and tail.</label>
+          <label><input type="checkbox"> I can inspect CPU, memory, disk and running processes.</label>
+          <label><input type="checkbox"> I can start, stop, enable and troubleshoot systemd services.</label>
+          <label><input type="checkbox"> I can inspect IP addresses, routes, DNS and listening ports.</label>
+          <label><input type="checkbox"> I can connect to a Linux host using SSH and troubleshoot access.</label>
+          <label><input type="checkbox"> I can add and verify firewalld rules.</label>
+          <label><input type="checkbox"> I understand SELinux modes, contexts and AVC denials.</label>
+          <label><input type="checkbox"> I can explain the difference between an image and a container.</label>
+          <label><input type="checkbox"> I can explain Docker client, daemon, API and runtime architecture.</label>
+          <label><input type="checkbox"> I can pull images and list containers.</label>
+          <label><input type="checkbox"> I can run, inspect, exec into, stop and remove containers.</label>
+          <label><input type="checkbox"> I can read and write a basic Dockerfile.</label>
+          <label><input type="checkbox"> I can build and tag my own Docker image.</label>
+          <label><input type="checkbox"> I understand volumes and bind mounts.</label>
+          <label><input type="checkbox"> I can create a bridge network and connect containers.</label>
+          <label><input type="checkbox"> I understand port publishing and container ports.</label>
+          <label><input type="checkbox"> I can log in to Docker Hub and push an image.</label>
+          <label><input type="checkbox"> I can pull my image on another machine and run it.</label>
+          <label><input type="checkbox"> I completed the mini project and can troubleshoot it.</label>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<footer>Linux & Docker Learning Hub · Built for hands-on practice · Keep learning, keep building.</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(button=>{
+  button.addEventListener('click',async()=>{
+    const code=button.parentElement.nextElementSibling.querySelector('code');
+    if(!code)return;
+    try{
+      await navigator.clipboard.writeText(code.innerText);
+      const old=button.innerText;button.innerText='Copied!';
+      setTimeout(()=>button.innerText=old,1200);
+    }catch(e){button.innerText='Select code';}
+  });
+});
+const checks=[...document.querySelectorAll('#checks input')];
+const bar=document.getElementById('progressBar');
+const text=document.getElementById('progressText');
+function updateProgress(){
+  const done=checks.filter(c=>c.checked).length;
+  bar.style.width=(done/checks.length*100)+'%';
+  text.textContent=`${done} of ${checks.length} completed`;
+}
+checks.forEach(c=>c.addEventListener('change',updateProgress));
+updateProgress();
+</script>
+</body>
+</html>
